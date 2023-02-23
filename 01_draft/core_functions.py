@@ -1,3 +1,7 @@
+import numpy as np
+from scipy.stats import chi2
+import pandas as pd
+
 def GWAS_linear_combination_Z_based(a, Z, covm, eaf, N):
     """
     This function performs a linear combination of genome-wide association studies (GWAS) based on their Z-scores,
@@ -38,8 +42,9 @@ def GWAS_linear_combination_Z_based(a, Z, covm, eaf, N):
         - `n_total` : float
             The effective sample size of the linear combination of the GWAS.
     """
+    import numpy as np
     from scipy.stats import chi2
-
+    import pandas as pd
     # Calculate standard errors from Z-scores
     SE = np.sqrt(1 / (Z ** 2 + N))
     # Calculate betas from Z-scores
@@ -80,6 +85,10 @@ def GWAS_linear_combination_Z_based_OLD(a, Z, covm, eaf, N):
     covm is phenotypic coreralashion matrix mxm
     eaf is the np array of EAF for each SNP 1xM
     """
+
+    from scipy.stats import chi2
+    import numpy as np
+    import pandas as pd
     #
     m=Z.shape[1]
     #
