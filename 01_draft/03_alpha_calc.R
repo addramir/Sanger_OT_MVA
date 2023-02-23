@@ -17,6 +17,14 @@ L$alphas["OPTIM.max(Shared/Phen)",]
 
 L=shared_heredity(CorGenTr = gcor,CorPhenTr = as.matrix(phe),h2 = h2)
 L$alphas["OPTIM.max(Shared/Phen)",]
+
+#Alpha.FINNGEN_R6_FG_CVD Alpha.FINNGEN_R6_I9_CVD          Alpha.SAIGE_459        Alpha.SAIGE_459_9 
+#0.4980116              0.3785392                0.2401656                0.2578737 
+
+
 #L$GIPs$GIP_coeff[,"GIP1"]
+
 L$res["OPTIM.max(Shared/Phen)","h2(Gen/Phen)"]
+#0.03435599
+
 #L$GIPs$H2["GIP1"]
