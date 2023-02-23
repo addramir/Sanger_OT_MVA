@@ -68,6 +68,7 @@ for gw in SIDS[1:]:
     DF = DF.join(gwas, on = "id", how = "inner")
 
 DF=DF.toPandas()
+
 Z=DF[["z1","z2","z3","z4"]]
 Z=np.array(Z)
 
@@ -82,11 +83,14 @@ phe=np.array(phe)
 eaf=DF["eaf"]
 eaf=np.array(eaf)
 
-import core_functions
+from core_functions import GWAS_linear_combination_Z_based
+#from core_functions import GWAS_linear_combination_Z_based_OLD
 
 MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
-MVA2=GWAS_linear_combination_Z_based_v2(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
+#MVA2=GWAS_linear_combination_Z_based_OLD(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
 
-df=DF[["id","chrom","pos",""]]
+df=DF[["id","chrom","pos","ref","alt"]]
+df=pd.concat([df,MVA], axis=1)
 
+df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA.csv",index=False)
 
