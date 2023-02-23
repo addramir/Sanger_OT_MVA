@@ -7,7 +7,6 @@ from scipy import stats
 import numpy as np
 import pandas as pd
 
-
 #Spark initialization and configuration
 
 global spark
@@ -83,6 +82,7 @@ phe=np.array(phe)
 eaf=DF["eaf"]
 eaf=np.array(eaf)
 
+import core_functions
 
 MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
 MVA2=GWAS_linear_combination_Z_based_v2(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
