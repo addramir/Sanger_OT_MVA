@@ -25,6 +25,7 @@ spark = (
 
 h2=pd.read_csv("h2.csv")
 phe=pd.read_csv("phen_corr.csv",header=None)
+gcor=pd.read_csv("gcor.csv",index_col=0)
 
 SIDS=h2["study_id"].values
 
@@ -75,8 +76,10 @@ Z=np.array(Z)
 N=DF[["n1","n2","n3","n4"]]
 N=np.array(N)
 
-a=[0.4980116,0.3785392,0.2401656,0.2578737]
-a=np.array(a)
+h2=np.array(h2["h2"])
+gcor=np.array(gcor)
+#a=[0.4980116,0.3785392,0.2401656,0.2578737]
+#a=np.array(a)
 
 phe=np.array(phe)
 
@@ -84,13 +87,16 @@ eaf=DF["eaf"]
 eaf=np.array(eaf)
 
 from core_functions import GWAS_linear_combination_Z_based
+from core_functions import GIP1_lin_comb_Z_based
 #from core_functions import GWAS_linear_combination_Z_based_OLD
 
-MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
+#MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
 #MVA2=GWAS_linear_combination_Z_based_OLD(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
+MVA=GIP1_lin_comb_Z_based(Z=Z,covm=phe,eaf=eaf,N=N, gcor=gcor, h2=h2)
+
 
 df=DF[["id","chrom","pos","ref","alt"]]
 df=pd.concat([df,MVA], axis=1)
 
-df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA.csv",index=False)
+df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA_GIP1.csv",index=False)
 

@@ -2,6 +2,27 @@ import numpy as np
 from scipy.stats import chi2
 import pandas as pd
 
+
+def GIP1_lin_comb_Z_based(Z, covm, eaf, N, gcor, h2):
+    import numpy as np
+    from scipy.stats import chi2
+    import pandas as pd
+
+    gcov=np.sqrt(np.outer(h2, h2))*gcor
+
+    a=np.linalg.eig(gcov)[1][:,0]
+    vary = np.sum(covm * np.outer(a, a))
+    a=a/np.sqrt(vary)
+    vary = np.sum(covm * np.outer(a, a))
+    if a[0]<0:
+        a=-a
+    print("GIP1 coeffs are:")
+    print(a)    
+    MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=covm,eaf=eaf,N=N)
+
+    return MVA
+
+
 def GWAS_linear_combination_Z_based(a, Z, covm, eaf, N):
     """
     This function performs a linear combination of genome-wide association studies (GWAS) based on their Z-scores,
