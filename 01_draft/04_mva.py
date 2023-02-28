@@ -18,10 +18,12 @@ spark = (
     .getOrCreate()
 )
 
-#variant_annotation = spark.read.parquet("gs://genetics-portal-dev-data/22.09.0/outputs/lut/variant-index")
-#variant_annotation = (variant_annotation
-#               .withColumn("id", f.concat_ws("_", f.col("chr_id"), f.col("position"), f.col("ref_allele"), f.col("alt_allele")))
-#               )
+variant_annotation = spark.read.parquet("gs://genetics-portal-dev-data/22.09.0/outputs/lut/variant-index")
+variant_annotation = (variant_annotation
+               .withColumn("id", f.concat_ws("_", f.col("chr_id"), f.col("position"), f.col("ref_allele"), f.col("alt_allele")))
+               )
+variant_annotation=variant_annotation.select("rs_id","id")
+
 
 h2=pd.read_csv("h2.csv")
 phe=pd.read_csv("phen_corr.csv",header=None)
@@ -68,6 +70,9 @@ for gw in SIDS[1:]:
     i=i+1
     DF = DF.join(gwas, on = "id", how = "inner")
 
+
+l=DF.join(variant_annotation, on="id", how="inner").distinct()
+DF=l
 DF=DF.toPandas()
 
 Z=DF[["z1","z2","z3","z4"]]
@@ -95,8 +100,8 @@ from core_functions import GIP1_lin_comb_Z_based
 MVA=GIP1_lin_comb_Z_based(Z=Z,covm=phe,eaf=eaf,N=N, gcor=gcor, h2=h2)
 
 
-df=DF[["id","chrom","pos","ref","alt"]]
+df=DF[["id","chrom","pos","ref","alt","rs_id"]]
 df=pd.concat([df,MVA], axis=1)
 
-df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA_GIP1.csv",index=False)
+df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA_GIP1_with_rsid.csv",index=False)
 
