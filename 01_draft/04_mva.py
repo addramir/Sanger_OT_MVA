@@ -75,6 +75,11 @@ l=DF.join(variant_annotation, on="id", how="inner").distinct()
 DF=l
 DF=DF.toPandas()
 
+sum(DF["z1"]**2>=29.71679)
+sum(DF["z2"]**2>=29.71679)
+sum(DF["z3"]**2>=29.71679)
+sum(DF["z4"]**2>=29.71679)
+
 Z=DF[["z1","z2","z3","z4"]]
 Z=np.array(Z)
 
