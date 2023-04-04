@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import re
 
+from scipy.cluster.hierarchy import linkage, cut_tree
+from scipy.spatial.distance import squareform
 import core_functions as CF
 #from core_functions import GWAS_linear_combination_Z_based
 #from core_functions import GIP1_lin_comb_Z_based
@@ -53,17 +55,33 @@ clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_qc)]
 
 number_of_clusters=clusters["x"].max()
 
+max_in_mva=3
 
-i=1
-for i in range(1,number_of_clusters):
-    y=clusters[clusters.iloc[:,1]==i]
-    if len(y)>1:
-        list_of_ids=list(y.iloc[:,0])
+clst=1
+#for clst in range(1,number_of_clusters+1):
+    subclst=clusters[clusters.iloc[:,1]==clst]
+    
+    if len(subclst)>1:
+    
+        list_of_ids=list(subclst.iloc[:,0])
+    
         phe=CF.phe_corr(list_of_ids)
+    
+        if len(list_of_ids)>max_in_mva:
+            dist = squareform(1 - np.power(phe, 2))
+            l = linkage(dist, method='ward')
+            grps = cut_tree(l, n_clusters=max_in_mva).flatten()
+            out = []
+            for i in range(0, max_in_mva):
+                ids = list(np.array(list_of_ids)[grps == i])
+                subset = h2[h2["Trait"].isin(ids)]
+                si = subset.iloc[subset["Total Observed scale h2"].argmax(),0]
+                out.append(si)
+        else:
+            out=list_of_ids
 
-
-
-
+        list_for_mva=out
+            
 
 
 
