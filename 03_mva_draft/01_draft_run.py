@@ -45,6 +45,7 @@ clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
 number_of_clusters=clusters["x"].max()
 
 
+i=1
 for i in range(1,number_of_clusters):
     y=clusters[clusters.iloc[:,1]==i]
     if len(y)>1:

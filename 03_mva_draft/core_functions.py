@@ -27,12 +27,13 @@ def phe_corr(list_of_ids):
     print("N "+str(0)+": "+gw)
     gw='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
     gwas=spark.read.parquet(gw)
+    print(gwas.count())
     gwas=(gwas
         .withColumn("id", f.concat_ws("_", f.col("chrom"), f.col("pos"), f.col("ref"), f.col("alt")))
         .withColumn("zscore", f.col("beta")/f.col("se"))
         )
     gwas=(gwas
-        .filter((f.col("zscore")**2)<=4)
+        #.filter((f.col("zscore")**2)<=4)
         .filter(f.col("eaf")>=0.01)
         .filter(f.col("eaf")<=0.99)
         )
@@ -42,17 +43,19 @@ def phe_corr(list_of_ids):
         print("N: "+gw)
         gw='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
         gwas=spark.read.parquet(gw)
-        gwas=(gwas
-            .withColumn("id", f.concat_ws("_", f.col("chrom"), f.col("pos"), f.col("ref"), f.col("alt")))
-            .withColumn("zscore", f.col("beta")/f.col("se"))
-            )
-        gwas=(gwas
-            .filter((f.col("zscore")**2)<=4)
-            .filter(f.col("eaf")>=0.01)
-            .filter(f.col("eaf")<=0.99)
-            )
-        gwas=gwas.select("id","zscore")
-        Z = Z.join(gwas, on = "id", how = "inner")
+        l=gwas.count()
+        if l>2e6:
+            gwas=(gwas
+                .withColumn("id", f.concat_ws("_", f.col("chrom"), f.col("pos"), f.col("ref"), f.col("alt")))
+                .withColumn("zscore", f.col("beta")/f.col("se"))
+                )
+            gwas=(gwas
+                #.filter((f.col("zscore")**2)<=4)
+                .filter(f.col("eaf")>=0.01)
+                .filter(f.col("eaf")<=0.99)
+                )
+            gwas=gwas.select("id","zscore")
+            Z = Z.join(gwas, on = "id", how = "inner")
 
 
     from pyspark.sql.functions import monotonically_increasing_id
