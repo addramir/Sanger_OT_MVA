@@ -8,6 +8,11 @@ import numpy as np
 import pandas as pd
 import re
 
+import core_functions as CF
+#from core_functions import GWAS_linear_combination_Z_based
+#from core_functions import GIP1_lin_comb_Z_based
+#from core_functions import phe_corr
+
 #Spark initialization and configuration
 
 global spark
@@ -35,12 +40,16 @@ list_of_traits_in_gcor=list(GCOR.columns)
 #self checking
 sum([elem in list_of_traits_in_h2 for elem in list_of_traits_in_gcor])
 
+QC=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/QC_results.csv",sep=";")
+QC=QC[QC["total_SNP"]>=2e6]
+list_of_traits_in_qc=list(QC["study_id"])
 
 clusters=pd.read_csv("~/projects/Sanger_OT_MVA/03_mva_draft/Study_and_cluster.csv")
 list_of_traits_in_clusters=list(clusters.iloc[:,0])
 sum([elem in list_of_traits_in_gcor for elem in list_of_traits_in_clusters])
-clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
 
+clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
+clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_qc)]
 
 number_of_clusters=clusters["x"].max()
 
@@ -50,7 +59,7 @@ for i in range(1,number_of_clusters):
     y=clusters[clusters.iloc[:,1]==i]
     if len(y)>1:
         list_of_ids=list(y.iloc[:,0])
-
+        phe=CF.phe_corr(list_of_ids)
 
 
 
@@ -128,8 +137,7 @@ phe=np.array(phe)
 eaf=DF["eaf"]
 eaf=np.array(eaf)
 
-from core_functions import GWAS_linear_combination_Z_based
-from core_functions import GIP1_lin_comb_Z_based
+
 #from core_functions import GWAS_linear_combination_Z_based_OLD
 
 #MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=phe,eaf=eaf,N=N)
