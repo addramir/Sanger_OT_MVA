@@ -1,36 +1,15 @@
-from pyspark.sql import SparkSession
-import pyspark.sql.functions as f
-import pyspark.sql.types as t
-from pyspark.sql import Window
 import scipy as sc
 from scipy import stats
 import numpy as np
 import pandas as pd
 import re
-
+import os
 from scipy.cluster.hierarchy import linkage, cut_tree
 from scipy.spatial.distance import squareform
+
+os.chdir("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/")
 import core_functions as CF
-#from core_functions import GWAS_linear_combination_Z_based
-#from core_functions import GIP1_lin_comb_Z_based
-#from core_functions import phe_corr
 
-#Spark initialization and configuration
-
-global spark
-spark = (
-    SparkSession.builder
-    .master('local[*]')
-    .config('spark.driver.memory', '15g')
-    .appName('spark')
-    .getOrCreate()
-)
-
-variant_annotation = spark.read.parquet("gs://genetics-portal-dev-data/22.09.1/outputs/lut/variant-index")
-variant_annotation = (variant_annotation
-               .withColumn("id", f.concat_ws("_", f.col("chr_id"), f.col("position"), f.col("ref_allele"), f.col("alt_allele")))
-               )
-variant_annotation=variant_annotation.select("rs_id","id")
 
 h2=pd.read_csv("~/projects/Sanger_OT_MVA/03_mva_draft/all_h2.csv",sep="\t")
 h2["Trait"]=[re.sub(string=x,pattern=".results",repl="") for x in h2["Trait"]]
@@ -82,10 +61,16 @@ clst=1
 
         list_for_mva=out
             
+        ind = [list_of_ids.index(elem) for elem in list_for_mva] 
+        phe_mva=phe[np.ix_(ind,ind)]
 
+        ind = [list_of_traits_in_gcor.index(elem) for elem in list_for_mva] 
+        gcor_mva=np.array(GCOR.iloc[ind,ind])
 
-
-
+        ind = [list_of_traits_in_h2.index(elem) for elem in list_for_mva] 
+        h2_mva=np.array(h2.iloc[ind,1])
+        
+        Z,N,eaf,DF=CF.prepare_Z_N_eaf(list_of_mva)
 
 
 
@@ -145,6 +130,9 @@ Z=np.array(Z)
 N=DF[["n1","n2","n3","n4"]]
 N=np.array(N)
 
+eaf=DF["eaf"]
+eaf=np.array(eaf)
+
 h2=np.array(h2["h2"])
 gcor=np.array(gcor)
 #a=[0.4980116,0.3785392,0.2401656,0.2578737]
@@ -152,8 +140,7 @@ gcor=np.array(gcor)
 
 phe=np.array(phe)
 
-eaf=DF["eaf"]
-eaf=np.array(eaf)
+
 
 
 #from core_functions import GWAS_linear_combination_Z_based_OLD

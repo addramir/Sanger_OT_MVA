@@ -2,6 +2,92 @@ import numpy as np
 from scipy.stats import chi2
 import pandas as pd
 
+def prepare_Z_N_eaf(list_of_ids):
+    from pyspark.sql import SparkSession
+    import pyspark.sql.functions as f
+    import pyspark.sql.types as t
+    from pyspark.sql import Window
+    import scipy as sc
+    from scipy import stats
+    import numpy as np
+    import pandas as pd
+    from scipy.stats import chi2
+
+
+    #Spark initialization and configuration
+
+    global spark
+    spark = (
+        SparkSession.builder
+        .master('local[*]')
+        .config('spark.driver.memory', '15g')
+        .appName('spark')
+        .getOrCreate()
+    )
+
+    variant_annotation = spark.read.parquet("gs://genetics-portal-dev-data/22.09.1/outputs/lut/variant-index")
+    variant_annotation = (variant_annotation
+                   .withColumn("id", f.concat_ws("_", f.col("chr_id"), f.col("position"), f.col("ref_allele"), f.col("alt_allele")))
+                   )
+    variant_annotation=variant_annotation.select("rs_id","id")
+
+    gw=list_of_ids[0]
+    print("N "+str(0)+": "+gw)
+    gw='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
+    gwas=spark.read.parquet(gw)
+    gwas=(gwas
+        .withColumn("id", f.concat_ws("_", f.col("chrom"), f.col("pos"), f.col("ref"), f.col("alt")))
+        .withColumn("zscore", f.col("beta")/f.col("se"))
+        )
+    gwas=(gwas
+        .filter(f.col("eaf")>=0.001)
+        .filter(f.col("eaf")<=0.999)
+        )
+    DF=gwas.select("id","zscore","eaf","n_total",'chrom','pos','ref','alt')
+    DF=(DF
+        .withColumnRenamed("zscore", "z1")
+        .withColumnRenamed("n_total", "n1")
+        )
+
+    i=2
+    for gw in list_of_ids[1:]:
+        print("N: "+gw)
+        gw='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
+        gwas=spark.read.parquet(gw)
+        gwas=(gwas
+            .withColumn("id", f.concat_ws("_", f.col("chrom"), f.col("pos"), f.col("ref"), f.col("alt")))
+            .withColumn("zscore", f.col("beta")/f.col("se"))
+            )
+        gwas=(gwas
+            .filter(f.col("eaf")>=0.001)
+            .filter(f.col("eaf")<=0.999)
+            )
+        gwas=gwas.select("id","zscore","n_total")
+        gwas=(gwas
+            .withColumnRenamed("zscore", ("z"+str(i)))
+            .withColumnRenamed("n_total", ("n"+str(i)))
+        )
+        i=i+1
+        DF = DF.join(gwas, on = "id", how = "inner")
+
+
+    l=DF.join(variant_annotation, on="id", how="inner").distinct()
+    DF=l.toPandas()
+
+    ntraits=len(list_of_ids)
+    Z=DF[["z"+str(elem) for elem in range(1,ntraits+1)]]
+    Z=np.array(Z)
+
+    N=DF[["n"+str(elem) for elem in range(1,ntraits+1)]]
+    N=np.array(N)
+
+    eaf=DF["eaf"]
+    eaf=np.array(eaf)
+
+    DF=DF[['id','chrom', 'pos', 'ref', 'alt','rs_id']]
+
+    return Z,N,eaf,DF
+
 def phe_corr(list_of_ids):
     from pyspark.sql import SparkSession
     import pyspark.sql.functions as f
