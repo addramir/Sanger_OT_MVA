@@ -11,7 +11,7 @@ import core_functions as CF
 
 ##### Global variables
 max_in_mva=3
-path_to_save=""
+path_to_save="/home/yt4/projects/MVA_output/01_clusters_draft/output/"
 max_ram_to_use="30g"
 
 ##### Load all data
@@ -42,6 +42,7 @@ number_of_clusters=clusters["x"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
+for clst in range(1,4):
     subclst=clusters[clusters.iloc[:,1]==clst]
     
     if len(subclst)>1:
@@ -66,6 +67,16 @@ clst=1
         MVA=CF.GIP1_lin_comb_Z_based(Z=Z,covm=phe_mva,eaf=eaf,N=N, gcor=gcor_mva, h2=h2_mva)
 
         df=pd.concat([DF,MVA], axis=1)
-
-        #df.to_csv("/home/yt4/projects/SS_QC/CVD_MVA_GIP1_with_rsid.csv",index=False)
+        
+        #saving data
+        folder_path=path_to_save+str(clst)+"/"
+        if !os.path.exists(folder_path):
+            os.mkdir()
+        df.to_csv(folder_path+"/GIP1.csv",index=False)
+        np.savetxt(folder_path+"/gcor.csv", gcor_mva, delimiter=',')
+        np.savetxt(folder_path+"/phe.csv", phe_mva, delimiter=',')
+        np.savetxt(folder_path+"/h2.csv", h2_mva, delimiter=',')
+        np.savetxt(folder_path+"/h2.csv", h2_mva, delimiter=',')
+        dd=pd.DataFrame(list_for_mva,columns=["StudyID"])
+        dd.to_csv(folder_path+"/list_of_traits.csv",index=False)
 
