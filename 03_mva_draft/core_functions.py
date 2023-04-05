@@ -1,6 +1,25 @@
-import numpy as np
-from scipy.stats import chi2
-import pandas as pd
+
+def list_of_mva_traits_based_on_phe(phe,max_in_mva,list_of_ids,h2):
+    from scipy.cluster.hierarchy import linkage, cut_tree
+    from scipy.spatial.distance import squareform
+    import numpy as np
+    from scipy.stats import chi2
+    import pandas as pd
+    
+    if len(list_of_ids)>max_in_mva:
+        dist = squareform(1 - np.power(phe, 2))
+        l = linkage(dist, method='ward')
+        grps = cut_tree(l, n_clusters=max_in_mva).flatten()
+        out = []
+        for i in range(0, max_in_mva):
+            ids = list(np.array(list_of_ids)[grps == i])
+            subset = h2[h2["Trait"].isin(ids)]
+            si = subset.iloc[subset["Total Observed scale h2"].argmax(),0]
+            out.append(si)
+    else:
+        out=list_of_ids
+
+    return out
 
 def prepare_Z_N_eaf(list_of_ids):
     from pyspark.sql import SparkSession
@@ -84,7 +103,7 @@ def prepare_Z_N_eaf(list_of_ids):
     eaf=DF["eaf"]
     eaf=np.array(eaf)
 
-    DF=DF[['id','chrom', 'pos', 'ref', 'alt','rs_id']]
+    DF=DF[['rs_id','chrom', 'pos', 'ref', 'alt','eaf']]
 
     return Z,N,eaf,DF
 
