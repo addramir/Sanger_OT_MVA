@@ -9,7 +9,12 @@ import os
 os.chdir("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/")
 import core_functions as CF
 
+##### Global variables
+max_in_mva=3
+path_to_save=""
+max_ram_to_use="30g"
 
+##### Load all data
 h2=pd.read_csv("~/projects/Sanger_OT_MVA/03_mva_draft/all_h2.csv",sep="\t")
 h2["Trait"]=[re.sub(string=x,pattern=".results",repl="") for x in h2["Trait"]]
 list_of_traits_in_h2=list(h2["Trait"])
@@ -33,7 +38,7 @@ clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_qc)]
 
 number_of_clusters=clusters["x"].max()
 
-max_in_mva=3
+##### Main loop
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
@@ -43,9 +48,9 @@ clst=1
     
         list_of_ids=list(subclst.iloc[:,0])
     
-        phe=CF.phe_corr(list_of_ids)
+        phe=CF.phe_corr(list_of_ids,max_ram_to_use)
     
-        list_for_mva=CF.list_of_mva_traits_based_on_phe(phe=phe,max_in_mva=max_in_mva,list_of_ids,h2=h2)
+        list_for_mva=CF.list_of_mva_traits_based_on_phe(phe=phe,max_in_mva=max_in_mva,list_of_ids=list_of_ids,h2=h2)
             
         ind = [list_of_ids.index(elem) for elem in list_for_mva] 
         phe_mva=phe[np.ix_(ind,ind)]
@@ -56,7 +61,7 @@ clst=1
         ind = [list_of_traits_in_h2.index(elem) for elem in list_for_mva] 
         h2_mva=np.array(h2.iloc[ind,1])
         
-        Z,N,eaf,DF=CF.prepare_Z_N_eaf(list_for_mva)
+        Z,N,eaf,DF=CF.prepare_Z_N_eaf(list_for_mva,max_ram_to_use)
 
         MVA=CF.GIP1_lin_comb_Z_based(Z=Z,covm=phe_mva,eaf=eaf,N=N, gcor=gcor_mva, h2=h2_mva)
 

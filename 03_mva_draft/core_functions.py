@@ -21,7 +21,7 @@ def list_of_mva_traits_based_on_phe(phe,max_in_mva,list_of_ids,h2):
 
     return out
 
-def prepare_Z_N_eaf(list_of_ids):
+def prepare_Z_N_eaf(list_of_ids,max_ram_to_use):
     from pyspark.sql import SparkSession
     import pyspark.sql.functions as f
     import pyspark.sql.types as t
@@ -39,7 +39,7 @@ def prepare_Z_N_eaf(list_of_ids):
     spark = (
         SparkSession.builder
         .master('local[*]')
-        .config('spark.driver.memory', '15g')
+        .config('spark.driver.memory', max_ram_to_use)
         .appName('spark')
         .getOrCreate()
     )
@@ -107,7 +107,7 @@ def prepare_Z_N_eaf(list_of_ids):
 
     return Z,N,eaf,DF
 
-def phe_corr(list_of_ids):
+def phe_corr(list_of_ids,max_ram_to_use):
     from pyspark.sql import SparkSession
     import pyspark.sql.functions as f
     import pyspark.sql.types as t
@@ -123,7 +123,7 @@ def phe_corr(list_of_ids):
     spark = (
         SparkSession.builder
         .master('local[*]')
-        .config('spark.driver.memory', '15g')
+        .config('spark.driver.memory', max_ram_to_use)
         .appName('spark')
         .getOrCreate()
     )
