@@ -71,7 +71,7 @@ for clst in range(1,4):
         #saving data
         folder_path=path_to_save+str(clst)+"/"
         if not(os.path.exists(folder_path)):
-            os.mkdir()
+            os.mkdir(folder_path)
         
         df.to_csv(folder_path+"/GIP1.csv",index=False)
         np.savetxt(folder_path+"/gcor.csv", gcor_mva, delimiter=',')
