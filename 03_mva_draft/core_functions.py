@@ -67,6 +67,9 @@ def prepare_Z_N_eaf(list_of_ids,max_ram_to_use):
         .withColumnRenamed("zscore", "z1")
         .withColumnRenamed("n_total", "n1")
         )
+    DF=DF.join(variant_annotation, on="id", how="inner").distinct()
+    DF=DF.toPandas()
+    variant_annotation=0
 
     i=2
     for gw in list_of_ids[1:]:
@@ -87,11 +90,13 @@ def prepare_Z_N_eaf(list_of_ids,max_ram_to_use):
             .withColumnRenamed("n_total", ("n"+str(i)))
         )
         i=i+1
-        DF = DF.join(gwas, on = "id", how = "inner")
+        gwas=gwas.toPandas()
+        DF=pd.merge(DF,gwas,on="id",how="inner")
+        #DF = DF.join(gwas, on = "id", how = "inner")
 
+    #DF=l.toPandas()
 
-    l=DF.join(variant_annotation, on="id", how="inner").distinct()
-    DF=l.toPandas()
+    spark.stop()
 
     ntraits=len(list_of_ids)
     Z=DF[["z"+str(elem) for elem in range(1,ntraits+1)]]
@@ -169,7 +174,7 @@ def phe_corr(list_of_ids,max_ram_to_use):
         gwas.columns=["id","zscore"+str(j)]
         j=j+1
         #Z = Z.join(gwas, on = "id", how = "inner")
-        Z=pd.merge(Z,gwas,on="id",how="left")
+        Z=pd.merge(Z,gwas,on="id",how="inner")
 
     #from pyspark.sql.functions import monotonically_increasing_id
 
@@ -191,6 +196,8 @@ def phe_corr(list_of_ids,max_ram_to_use):
             y=l[:,1]
             out[i,j]=np.corrcoef(x,y)[1,0]
             out[j,i]=out[i,j]
+
+    spark.stop()
 
     return out
 

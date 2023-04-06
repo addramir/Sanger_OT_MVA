@@ -40,7 +40,7 @@ number_of_clusters=clusters["x"].max()
 
 ##### Main loop
 
-clst=2
+clst=1
 #for clst in range(1,number_of_clusters+1):
 #for clst in range(1,4):
     subclst=clusters[clusters.iloc[:,1]==clst]
@@ -61,7 +61,7 @@ clst=2
 
         ind = [list_of_traits_in_h2.index(elem) for elem in list_for_mva] 
         h2_mva=np.array(h2.iloc[ind,1])
-        
+
         Z,N,eaf,DF=CF.prepare_Z_N_eaf(list_for_mva,max_ram_to_use)
 
         MVA=CF.GIP1_lin_comb_Z_based(Z=Z,covm=phe_mva,eaf=eaf,N=N, gcor=gcor_mva, h2=h2_mva)
