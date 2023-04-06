@@ -40,9 +40,9 @@ number_of_clusters=clusters["x"].max()
 
 ##### Main loop
 
-clst=1
+clst=2
 #for clst in range(1,number_of_clusters+1):
-for clst in range(1,4):
+#for clst in range(1,4):
     subclst=clusters[clusters.iloc[:,1]==clst]
     
     if len(subclst)>1:

@@ -143,7 +143,11 @@ def phe_corr(list_of_ids,max_ram_to_use):
         .filter(f.col("eaf")<=0.99)
         )
     Z=gwas.select("id","zscore")
+    Z=Z.toPandas()
+    Z.columns=["id","zscore1"]
 
+
+    j=2
     for gw in list_of_ids[1:]:
         print("N: "+gw)
         gw='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
@@ -160,15 +164,20 @@ def phe_corr(list_of_ids,max_ram_to_use):
             .filter(f.col("eaf")<=0.99)
             )
         gwas=gwas.select("id","zscore")
-        Z = Z.join(gwas, on = "id", how = "inner")
+        #    
+        gwas=gwas.toPandas()
+        gwas.columns=["id","zscore"+str(j)]
+        j=j+1
+        #Z = Z.join(gwas, on = "id", how = "inner")
+        Z=pd.merge(Z,gwas,on="id",how="left")
 
-
-    from pyspark.sql.functions import monotonically_increasing_id
+    #from pyspark.sql.functions import monotonically_increasing_id
 
     # add unique identifier to column names
-    df = Z.toDF(*[f"{col}_{i}" for i, col in enumerate(Z.columns)])
-    df=df.toPandas()
-    df=df.iloc[:,1:]
+    #df = Z.toDF(*[f"{col}_{i}" for i, col in enumerate(Z.columns)])
+    #df=df.toPandas()
+    
+    df=Z.iloc[:,1:]
     df=np.array(df)
 
     out=np.empty([len(list_of_ids),len(list_of_ids)])
