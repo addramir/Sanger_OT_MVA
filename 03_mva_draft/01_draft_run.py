@@ -29,14 +29,14 @@ QC=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/QC_results.csv",se
 QC=QC[QC["total_SNP"]>=2e6]
 list_of_traits_in_qc=list(QC["study_id"])
 
-clusters=pd.read_csv("~/projects/Sanger_OT_MVA/03_mva_draft/Study_and_cluster.csv")
+clusters=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/updated_grps_final_noNA.csv")
 list_of_traits_in_clusters=list(clusters.iloc[:,0])
 sum([elem in list_of_traits_in_gcor for elem in list_of_traits_in_clusters])
 
 clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
 clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_qc)]
 
-number_of_clusters=clusters["x"].max()
+number_of_clusters=clusters["grps"].max()
 
 ##### Main loop
 
