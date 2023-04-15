@@ -206,10 +206,8 @@ def GIP1_lin_comb_Z_based(Z, covm, eaf, N, gcor, h2):
     import numpy as np
     from scipy.stats import chi2
     import pandas as pd
-
     gcov=np.sqrt(np.outer(h2, h2))*gcor
-
-    a=np.linalg.eig(gcov)[1][:,0]
+    a=np.linalg.eig(gcov)[1][:,0].real
     vary = np.sum(covm * np.outer(a, a))
     a=a/np.sqrt(vary)
     vary = np.sum(covm * np.outer(a, a))
@@ -218,7 +216,6 @@ def GIP1_lin_comb_Z_based(Z, covm, eaf, N, gcor, h2):
     print("GIP1 coeffs are:")
     print(a)    
     MVA=GWAS_linear_combination_Z_based(a=a,Z=Z,covm=covm,eaf=eaf,N=N)
-
     return MVA
 
 

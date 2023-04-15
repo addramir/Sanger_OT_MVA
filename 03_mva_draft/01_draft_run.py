@@ -12,7 +12,7 @@ import core_functions as CF
 ##### Global variables
 max_in_mva=10
 path_to_save="/home/yt4/projects/MVA_output/01_clusters_draft/output/"
-max_ram_to_use="40g"
+max_ram_to_use="110g"
 
 ##### Load all data
 h2=pd.read_csv("~/projects/Sanger_OT_MVA/03_mva_draft/all_h2.csv",sep="\t")
@@ -42,7 +42,7 @@ number_of_clusters=clusters["grps"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
-for clst in range(1,number_of_clusters+1):
+for clst in range(65,number_of_clusters+1):
     print(str(clst))
     subclst=clusters[clusters.iloc[:,1]==clst]    
     if len(subclst)>1:
