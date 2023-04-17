@@ -70,3 +70,10 @@ for clst in range(422,number_of_clusters+1):
         dd=pd.DataFrame(list_for_mva,columns=["StudyID"])
         dd.to_csv(folder_path+"/list_of_traits.csv",index=False)
 
+clst=1
+out=[]
+#for clst in range(1,number_of_clusters+1):
+for clst in range(1,number_of_clusters+1):
+    subclst=clusters[clusters.iloc[:,1]==clst]    
+    if len(subclst)>1:
+        out.append(clst)
