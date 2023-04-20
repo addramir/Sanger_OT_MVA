@@ -13,8 +13,8 @@ si=fread("~/projects/Sanger_OT_MVA/03_mva_draft/study_index.csv",sep="\t",data.t
 h2_int=fread("~/projects/Sanger_OT_MVA/03_mva_draft/all_h2_intercepts.tsv",sep="\t",data.table=F)
 
 
-out=as.data.frame(array(NA,c(length(clstrs),9)))
-colnames(out)=c("N_cluster","n_traits","study_ids","traits","h2s","intercepts","alfa","expected_h2_gip1","expected_rgs")
+out=as.data.frame(array(NA,c(length(clstrs),10)))
+colnames(out)=c("N_cluster","n_traits","study_ids","traits","EFOs","h2s","intercepts","alfa","expected_h2_gip1","expected_rgs")
 
 for (cl in clstrs){
 
@@ -32,11 +32,17 @@ for (cl in clstrs){
 	sub_si=si[match(ltr,si$study_id),]
 	sub_h2=h2_int[match(ltr,h2_int$Trait),]
 
+	efos=unique(sub_si[,"trait_efos"])
+	efos=gsub(efos,pattern="'",replacement="",fixed=T)
+	efos=gsub(efos,pattern="[",replacement="",fixed=T)
+	efos=gsub(efos,pattern="]",replacement="",fixed=T)
+
 	i=match(cl,clstrs)
 	out[i,"N_cluster"]=cl
 	out[i,"n_traits"]=length(ltr)
 	out[i,"study_ids"]=paste(ltr,collapse=";")
 	out[i,"traits"]=paste(sub_si[,"trait_reported"],collapse=";")
+	out[i,"EFOs"]=paste(efos,collapse=";")
 	out[i,"h2s"]=paste(h2,collapse=";")
 	out[i,"intercepts"]=paste(sub_h2[,"Intercept"],collapse=";")
 	out[i,"alfa"]=paste(gips$GIP_coeff[,1],collapse=";")
