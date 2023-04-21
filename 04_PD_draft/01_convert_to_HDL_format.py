@@ -26,5 +26,4 @@ list_of_ids=[ "FINNGEN_R6_PDSTRICT_EXMORE",
   "GCST90000015",
   "SAIGE_332"]
 
-
-  
+save_gwas_hm3_snps_HDL(list_of_ids=list_of_ids, max_ram_to_use=max_ram_to_use, path_out=path_out)
