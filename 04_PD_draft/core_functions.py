@@ -1,4 +1,4 @@
-def save_gwas_hm3_snps_HDL(list_of_ids,max_ram_to_use,path_out)
+def save_gwas_hm3_snps_HDL(list_of_ids,max_ram_to_use,path_out):
 
     import pandas as pd
     from pyspark.sql import DataFrame, SparkSession
