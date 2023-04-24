@@ -15,7 +15,7 @@ for (i in 1:(n-1)){
 	for (j in (i+1):n){
 		gwas1=fread(lst[i],data.table=F)
 		gwas2=fread(lst[j],data.table=F)
-		res.HDL <- HDL.rg.parallel(gwas1, gwas2, LD.path, numCores = 8)
+		res.HDL <- HDL.rg.parallel(gwas1, gwas2, LD.path, numCores = 6)
 
 		out_rg[i,j]=out_rg[j,i]=res.HDL$rg
 		out_pval[i,j]=out_pval[j,i]=res.HDL$P
@@ -26,7 +26,7 @@ for (i in 1:(n-1)){
 	}
 }
 
-save(list=c("out_rg","out_pval","h2","h2_se"),file="~/projects/MVA_output/02_PD_gwas/v1_hm3_matrix.RData")
+save(list=c("lst","out_rg","out_pval","h2","h2_se"),file="~/projects/MVA_output/02_PD_gwas/v1_hm3_matrix.RData")
 
 ######
 
