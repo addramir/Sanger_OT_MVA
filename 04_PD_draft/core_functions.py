@@ -4,6 +4,7 @@ import pyspark.sql.functions as f
 from pyspark.sql.types import *
 from pyspark.sql.window import Window
 import numpy as np
+import os
 
 
 def get_spark_session(max_ram_to_use):
