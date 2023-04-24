@@ -55,10 +55,10 @@ save(list=c("out_rg","out_pval","h2","h2_se"),file="~/projects/MVA_output/02_PD_
 
 
 
+LD.path <- "~/projects/MVA_output/02_PD_gwas/UKB_imputed_hapmap2_SVD_eigen99_extraction"
 
-
-gwas1=fread("~/projects/MVA_output/02_PD_gwas/gwas/NEALE2_20107_11.txt",data.table=F)
-gwas2=fread("~/projects/MVA_output/02_PD_gwas/gwas/NEALE2_20110_11.txt",data.table=F)
+gwas1=fread("~/projects/MVA_output/02_PD_gwas/gwas/nallsEtAl2019_excluding23andMe.txt",data.table=F)
+gwas2=fread("~/projects/MVA_output/02_PD_gwas/gwas/IPDGC_AAO_GWAS_sumstats_april_2018.txt",data.table=F)
 
 res.HDL <- HDL.rg.parallel(gwas1, gwas2, LD.path, numCores = 6)
 res.HDL
