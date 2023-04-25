@@ -57,7 +57,7 @@ for (i in 2:(n-1)){
 	}
 }
 
-save(list=c("lst","out_rg","out_pval"),file="~/projects/MVA_output/02_PD_gwas/v1_hm3_matrix.RData")
+save(list=c("lst","out_rg","out_pval","h2"),file="~/projects/MVA_output/02_PD_gwas/v1_hm3_4x4_matrix.RData")
 
 ######
 

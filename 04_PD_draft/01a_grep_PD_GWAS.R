@@ -3,7 +3,7 @@ setwd("~/Projects/Sanger_OT_GoldStandards/01_orig_GS/")
 library(data.table)
 
 
-si=fread("study_index.csv",data.table=F)
+si=fread("C://Projects/Sanger_OT_MVA/03_mva_draft/study_index.csv",data.table=F)
 
 index=paste(si$trait_reported,si$n_initial,si$num_assoc_loci,sep = "_")
 table(duplicated(index))
