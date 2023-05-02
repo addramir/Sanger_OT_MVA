@@ -1,0 +1,1 @@
+~/projects/MVA_output/02_PD_gwas/generic-metal/metal ~/projects/Sanger_OT_MVA/04_PD_draft/08_metal.config
