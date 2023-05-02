@@ -44,3 +44,9 @@ CF.save_gwas_all_snps_HDL(list_of_ids=list_of_ids, max_ram_to_use=max_ram_to_use
 list_of_ids=["NEALE2_20107_11",
 "FINNGEN_R6_G6_PARKINSON_INCLAVO"]
 CF.save_gwas_all_snps_HDL(list_of_ids=list_of_ids, max_ram_to_use=max_ram_to_use, path_out=path_out)
+
+
+path_out="~/projects/MVA_output/02_PD_gwas/full_gwas/"
+list_of_ids=["NEALE2_20107_11","NEALE2_20110_11",
+"FINNGEN_R6_G6_PARKINSON_INCLAVO","FINNGEN_R6_G6_PARKINSON"]
+CF.save_gwas_all_snps_HDL(list_of_ids=list_of_ids, max_ram_to_use=max_ram_to_use, path_out=path_out)

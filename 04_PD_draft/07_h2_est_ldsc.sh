@@ -14,6 +14,23 @@ source activate ldsc
 --chunksize 500000 \
 --merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
 
+~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
+--sumstats GIP1_5_traits.txt \
+--out GIP1_5_traits \
+--chunksize 500000 \
+--merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--h2 GIP1_5_traits.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out GIP1_5_traits_h2
+#Total Observed scale h2: 0.0173 (0.0019)
+#Lambda GC: 1.1238
+#Mean Chi^2: 1.1562
+#Intercept: 1.03 (0.0067)
+#Ratio: 0.1918 (0.0427)
+
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
 --h2 GIP1_4_traits.sumstats.gz \
@@ -38,7 +55,23 @@ source activate ldsc
 #Ratio < 0 (usually indicates GC correction).
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg nallsEtAl2019_excluding23andMe.sumstats.gz,GIP1_5_traits.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+#0.9319  0.0151  61.7506  0.
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
 --rg nallsEtAl2019_excluding23andMe.sumstats.gz,GIP1_4_traits.sumstats.gz \
 --ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --out rg
+#0.9788  0.0073  133.8661  0.0
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg GIP1_4_traits.sumstats.gz,GIP1_5_traits.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+#0.8804  0.0175  50.1893  0.0
+

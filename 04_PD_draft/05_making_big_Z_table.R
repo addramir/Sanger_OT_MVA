@@ -1,15 +1,18 @@
 library("data.table")
 
 setwd("~/projects/MVA_output/02_PD_gwas/full_gwas/")
-load("~/projects/MVA_output/02_PD_gwas/v1_hm3_4x4_matrix.RData")
-#lst=c("nallsEtAl2019_excluding23andMe.txt","NEALE2_20002_1262.txt","NEALE2_20110_11.txt","SAIGE_332.txt")
+#load("~/projects/MVA_output/02_PD_gwas/v1_hm3_4x4_matrix.RData")
+lst=c("nallsEtAl2019_excluding23andMe.txt","NEALE2_20107_11.txt","NEALE2_20110_11.txt",
+"FINNGEN_R6_G6_PARKINSON_INCLAVO.txt","FINNGEN_R6_G6_PARKINSON.txt")
 
 
 i=1
 fl=lst[i]
 x=fread(fl,data.table=T)
 x=x[,Z:=b/se]
-out=x[,c("SNP","Z","N","eaf")]
+x=x[,c("SNP","Z","N","eaf")]
+colnames(x)=c("SNP",paste(c("Z","N","eaf"),fl,sep="_"))
+out=x
 out=out[SNP!=""]
 
 
@@ -20,11 +23,11 @@ for (i in 2:length(lst)){
 	x=x[,Z:=b/se]
 	x=x[,c("SNP","Z","N","eaf")]
 	x=x[SNP!=""]
-
+	colnames(x)=c("SNP",paste(c("Z","N","eaf"),fl,sep="_"))
 	out=merge(out,x,by="SNP",all=T)
 }
 
-save(list=c("out","lst"),file="~/projects/MVA_output/02_PD_gwas/4_Traits_Z_matrix.RData")
+save(list=c("out","lst"),file="~/projects/MVA_output/02_PD_gwas/5_Traits_Z_matrix.RData")
 
 i=1
 j=1
@@ -51,5 +54,5 @@ for (i in 1:(n-1)){
 	}
 }
 
-save(list=c("out","lst","phe"),file="~/projects/MVA_output/02_PD_gwas/4_Traits_Z_matrix.RData")
+save(list=c("out","lst","phe"),file="~/projects/MVA_output/02_PD_gwas/5_Traits_Z_matrix.RData")
 
