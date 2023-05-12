@@ -25,6 +25,7 @@ dim(n_f)
 #[1] 32 12
 n_f_full=cbind(n_f,trait="full")
 
+#17510617
 
 ####
 #with rsid
@@ -54,6 +55,19 @@ dim(fl)
 n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
 dim(n_f)
 #[1] 23 10
+
+####
+#with rsid
+fl=fread("GIP1_5_traits_neff.txt",data.table=F)
+head(fl)
+maf=pmin(fl$eaf,1-fl$eaf)
+fl=fl[maf>=0.001,]
+dim(fl)
+#[1] 8650201      10
+n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
+dim(n_f)
+#[1] 23 10
+
 
 ####
 #with rsid
@@ -88,7 +102,27 @@ dim(fl)
 #11760184       18
 n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="P-value",pos="pos",snp="MarkerName", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
 dim(n_f)
-#[1] 30 18
+#[1] 30 18           MarkerName Allele1 Allele2  Freq1 FreqSE MinFreq MaxFreq  Effect
+#rs356220     rs356220       t       c 0.3901 0.0000  0.3901  0.3901  0.2326
+#rs12752133 rs12752133       t       c 0.0293 0.0114  0.0186  0.0415  0.6367
+#rs34311866 rs34311866       t       c 0.8009 0.0051  0.7930  0.8042 -0.2085
+#rs35603727 rs35603727       a       g 0.0272 0.0087  0.0203  0.0381  0.5264
+#rs2696587   rs2696587       t       g 0.8074 0.0520  0.7827  0.9172  0.2284
+#           StdErr   P-value Direction HetISq HetChiSq HetDf  HetPVal
+#rs356220   0.0173 3.290e-41        +?    0.0    0.000     0 1.000000
+#rs12752133 0.0510 8.220e-36        ++   89.2    9.294     1 0.002299
+#rs34311866 0.0194 6.811e-27        --   55.1    2.225     1 0.135700
+#rs35603727 0.0491 8.696e-27        ++    0.0    0.119     1 0.729800
+#rs2696587  0.0230 3.741e-23        ++   42.7    1.745     1 0.186600
+#           TotalSampleSize       pos chr
+#rs356220            482730  90641340   4
+#rs12752133          740998 155205378   1
+#rs34311866          743135    951947   4
+#rs35603727          743135 156007988   1
+#rs2696587           743135  44222460  17
+
+
+
 
 n_f_ma=cbind(n_f,trait="MA")
 

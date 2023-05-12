@@ -20,6 +20,13 @@ source activate ldsc
 --chunksize 500000 \
 --merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
 
+~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
+--sumstats GIP1_5_traits_neff.txt \
+--out GIP1_5_traits_neff \
+--chunksize 500000 \
+--merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
+
+
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
 --sumstats ~/projects/MVA_output/02_PD_gwas/generic-metal/METAANALYSIS1.TBL \
@@ -73,6 +80,13 @@ source activate ldsc
 #Ratio < 0 (usually indicates GC correction).
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--h2 GIP1_5_traits_neff.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out GIP1_5_traits_neff_h2
+
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
 --h2 MA_F_N.sumstats.gz \
 --ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
@@ -108,6 +122,20 @@ source activate ldsc
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
 --rg MA_F_N.sumstats.gz,GIP1_5_traits.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg MA_F_N.sumstats.gz,GIP1_5_traits_neff.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg GIP1_5_traits.sumstats.gz,GIP1_5_traits_neff.sumstats.gz \
 --ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --out rg
