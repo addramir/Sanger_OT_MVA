@@ -17,7 +17,33 @@ ref=fread("~/projects/MVA_output/02_PD_gwas/full_gwas/NEALE2_20107_11.txt",data.
 ncases=c(33674,8043,5443,2562,2496)
 nctotal=c(482730,312104,330077,260405,260405)
 prev=ncases/nctotal
-neff=4*prev*(1-prev)*nctotal
+
+
+nqt_est=function(v,N){
+  z=dnorm(x=qnorm(v,mean=0,sd=1,low=F),mean=0,sd=1)
+  i=z/v
+  Nqt=N*i^2*v/(1-v)
+  Nqt
+}
+
+neff_est=function(v,N){
+  neff=4*v*(1-v)*N
+  neff
+}
+
+nqt_est_K=function(v,N,K){
+  z=dnorm(x=qnorm(K,mean=0,sd=1,low=F),mean=0,sd=1)
+  i=z/K
+  Nqt=N*i^2*v*(1-v)/(1-K)^2
+  Nqt
+}
+
+
+neff_1=neff_est(prev,nctotal)
+neff_2=nqt_est(prev,nctotal)
+neff_3=nqt_est_K(prev,nctotal,K=1/38)
+
+neff=neff_3
 
 gcor=as.matrix(array(1,c(5,5)))
 

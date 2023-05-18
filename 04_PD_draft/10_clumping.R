@@ -135,3 +135,21 @@ N=rbind(n1,n2)
 n_f=function_for_shlop_29_03_2020(locus_table=N,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait="trait")
 dim(n_f)
 
+
+
+####
+fl=fread("~/projects/MVA_output/02_PD_gwas/full_gwas/20230518_MA_over_14.txt",data.table=F)
+
+n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
+dim(n_f)
+#[1] 29  9
+
+####
+fl=fread("~/projects/MVA_output/02_PD_gwas/full_gwas/20230518_MA_over_all.txt",data.table=F)
+
+n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
+dim(n_f)
+#[1] 24  9
+
+
+
