@@ -151,5 +151,10 @@ n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="S
 dim(n_f)
 #[1] 24  9
 
+####
+fl=fread("~/projects/MVA_output/02_PD_gwas/full_gwas/20230518_MA_over_1-4.txt",data.table=F)
 
+n_f=function_for_shlop_29_03_2020(locus_table=fl,p_value="pval",pos="pos",snp="SNP", delta=5e5,chr="chr",thr=5e-8,trait=NULL)
+dim(n_f)
+#[1] 24  9
 

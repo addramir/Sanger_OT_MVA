@@ -26,6 +26,32 @@ source activate ldsc
 --chunksize 500000 \
 --merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
 
+~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
+--sumstats 20230518_MA_over_14.txt \
+--out 20230518_MA_over_14 \
+--signed-sumstat b_ma,0 \
+--N 350000 \
+--chunksize 500000 \
+--merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
+
+~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
+--sumstats 20230518_MA_over_all.txt \
+--out 20230518_MA_over_all \
+--signed-sumstat b_ma,0 \
+--N 350000 \
+--chunksize 500000 \
+--merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
+
+~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
+--sumstats 20230518_MA_over_1-4.txt \
+--out 20230518_MA_over_1-4 \
+--signed-sumstat b_ma,0 \
+--N 350000 \
+--chunksize 500000 \
+--merge-alleles ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/w_hm3.noMHC.snplist
+
+
+
 
 
 ~/projects/MVA_output/02_PD_gwas/ldsc/munge_sumstats.py \
@@ -139,3 +165,36 @@ source activate ldsc
 --ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
 --out rg
+
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg MA_F_N.sumstats.gz,20230518_MA_over_1-4.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg MA_F_N.sumstats.gz,20230518_MA_over_all.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg MA_F_N.sumstats.gz,20230518_MA_over_14.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg 20230518_MA_over_all.sumstats.gz,20230518_MA_over_14.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+~/projects/MVA_output/02_PD_gwas/ldsc/ldsc.py \
+--rg 20230518_MA_over_all.sumstats.gz,20230518_MA_over_1-4.sumstats.gz \
+--ref-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--w-ld-chr ~/projects/MVA_output/02_PD_gwas/ldsc/eur_ldscores/ \
+--out rg
+
+
