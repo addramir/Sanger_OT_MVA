@@ -353,3 +353,53 @@ def GWAS_linear_combination_Z_based_OLD(a, Z, covm, eaf, N):
     out=pd.DataFrame({'beta': b, 'se': seb, 'pval':pval, 'n_total':N_eff})
     return out
 
+
+
+def number_of_sig_snps(list_of_ids,max_ram_to_use):
+    from pyspark.sql import SparkSession
+    import pyspark.sql.functions as f
+    import pyspark.sql.types as t
+    from pyspark.sql import Window
+    import scipy as sc
+    from scipy import stats
+    import numpy as np
+    import pandas as pd
+
+    #
+    global spark
+    spark = (
+        SparkSession.builder
+        .master('local[*]')
+        .config('spark.driver.memory', max_ram_to_use)
+        .appName('spark')
+        .getOrCreate()
+    )
+
+    def create_empty_dataframe(rows, columns):
+        df = pd.DataFrame(index=range(rows), columns=range(columns))
+        return df
+
+
+    out=create_empty_dataframe(rows=len(list_of_ids),columns=4)
+
+    gw=list_of_ids[0]
+    i=0
+    for gw in list_of_ids:
+        print(gw)
+        gw_path='gs://genetics-portal-dev-sumstats/unfiltered/gwas/'+gw+'.parquet/'
+        gwas=spark.read.parquet(gw_path)
+        out.iloc[i,0]=gw
+        gwas=(gwas
+        .filter(f.col("eaf")>=0.001)
+        .filter(f.col("eaf")<=0.999)
+        )
+        out.iloc[i,1]=gwas.count()
+        gwas=(gwas
+            .filter(f.col("pval")<=5e-8))
+        out.iloc[i,2]=gwas.count()
+        out.iloc[i,3]=out.iloc[i,2]/out.iloc[i,1]
+        i=i+1
+    
+    spark.stop()
+    return out
+
