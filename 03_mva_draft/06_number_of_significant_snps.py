@@ -30,9 +30,19 @@ for clst in clusters:
     df=pd.read_csv(path_to_save+clst+"/GIP1.csv")
     list_of_ids=pd.read_csv(path_to_save+clst+"/list_of_traits.csv")
     list_of_ids=list(list_of_ids["StudyID"])
-    nsigs=CF.number_of_sig_snps(list_of_ids,max_ram_to_use)
-    v=["GIP1",len(df),sum(df["pval"]<=5e-8),sum(df["pval"]<=5e-8)/len(df)]
-    sigs=pd.concat([nsigs, pd.DataFrame([v])], axis=0)
-    sigs.columns=["ID","N","Nsig","Ratio"]
-    sigs.to_csv(path_to_save+clst+"/number_of_sigs.csv",index=False)
-
+    if (sum(df["pval"]<=5e-8)==0):
+        nsigs=CF.number_of_sig_snps(list_of_ids,max_ram_to_use)
+        v=["GIP1",len(df),sum(df["pval"]<=5e-8),sum(df["pval"]<=5e-8)/len(df)]
+        sigs=pd.concat([nsigs, pd.DataFrame([v])], axis=0)
+        sigs.columns=["ID","N","Nsig","Ratio"]
+        sigs.to_csv(path_to_save+clst+"/number_of_sigs.csv",index=False)
+    else:
+        dfs=df[df["pval"]<=5e-8]
+        dfs['id']= dfs.apply(lambda row: '_'.join([str(row['chrom']), str(row['pos']), row['ref'], row['alt']]), axis=1)
+        list_of_snps=list(dfs["id"])
+        nsigs=CF.number_of_sig_snps_and_mean_chi2(list_of_ids,max_ram_to_use,list_of_snps)
+        v=["GIP1",len(df),sum(df["pval"]<=5e-8),sum(df["pval"]<=5e-8)/len(df),((dfs["beta"]/dfs["se"])**2).mean()]
+        sigs=pd.concat([nsigs, pd.DataFrame([v])], axis=0)
+        sigs.columns=["ID","N","Nsig","Ratio","Avarage_Z2"]
+        sigs.to_csv(path_to_save+clst+"/number_of_sigs.csv",index=False)
+        
