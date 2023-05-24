@@ -11,7 +11,7 @@ delta_rg=abs(rgs$rg-rgs$expected_rgs)/abs(rgs$expected_rgs)
 delta_h2=abs(rgs$expected_h2-rgs$Total.Observed.scale.h2)/abs(rgs$expected_h2)
 intercept=rgs$Intercept
 
-ind_to_excl=which(delta_rg>0.1 | delta_h2>0.4 | intercept>1.3 | intercept<0.9)
+ind_to_excl=which(delta_rg>0.1 | delta_h2>0.3 | intercept>1.2 | intercept<0.9)
 
 clusters=unique(rgs$MVA)
 clusters_to_exclude=unique(rgs$MVA[ind_to_excl])
