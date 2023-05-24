@@ -42,7 +42,9 @@ for clst in clusters:
         list_of_snps=list(dfs["id"])
         nsigs=CF.number_of_sig_snps_and_mean_chi2(list_of_ids,max_ram_to_use,list_of_snps)
         v=["GIP1",len(df),sum(df["pval"]<=5e-8),sum(df["pval"]<=5e-8)/len(df),((dfs["beta"]/dfs["se"])**2).mean()]
-        sigs=pd.concat([nsigs, pd.DataFrame([v])], axis=0)
+        v=pd.DataFrame([v])
+        v.columns=["ID","N","Nsig","Ratio","Avarage_Z2"]
+        sigs=pd.concat([nsigs, v], axis=0)
         sigs.columns=["ID","N","Nsig","Ratio","Avarage_Z2"]
         sigs.to_csv(path_to_save+clst+"/number_of_sigs.csv",index=False)
         

@@ -42,7 +42,7 @@ number_of_clusters=clusters["grps"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
-for clst in range(422,number_of_clusters+1):
+for clst in range(1,number_of_clusters+1):
     print(str(clst))
     subclst=clusters[clusters.iloc[:,1]==clst]    
     if len(subclst)>1:
@@ -60,12 +60,11 @@ for clst in range(422,number_of_clusters+1):
         df=pd.concat([DF,MVA], axis=1)       
         #saving data
         folder_path=path_to_save+str(clst)+"/"
-        if not(os.path.exists(folder_path)):
-            os.mkdir(folder_path)        
+        #if not(os.path.exists(folder_path)):
+        #    os.mkdir(folder_path)        
         df.to_csv(folder_path+"/GIP1.csv",index=False)
         np.savetxt(folder_path+"/gcor.csv", gcor_mva, delimiter=',')
         np.savetxt(folder_path+"/phe.csv", phe_mva, delimiter=',')
-        np.savetxt(folder_path+"/h2.csv", h2_mva, delimiter=',')
         np.savetxt(folder_path+"/h2.csv", h2_mva, delimiter=',')
         dd=pd.DataFrame(list_for_mva,columns=["StudyID"])
         dd.to_csv(folder_path+"/list_of_traits.csv",index=False)
