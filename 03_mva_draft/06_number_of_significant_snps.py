@@ -12,7 +12,7 @@ import core_functions as CF
 ##### Global variables
 max_in_mva=10
 path_to_save="/home/yt4/projects/MVA_output/01_clusters_draft/output/"
-max_ram_to_use="25g"
+max_ram_to_use="100g"
 
 
 def get_directories(directory_path):

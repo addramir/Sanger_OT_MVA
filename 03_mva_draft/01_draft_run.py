@@ -42,7 +42,7 @@ number_of_clusters=clusters["grps"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
-for clst in range(1,number_of_clusters+1):
+for clst in range(90,number_of_clusters+1):
     print(str(clst))
     subclst=clusters[clusters.iloc[:,1]==clst]    
     if len(subclst)>1:
