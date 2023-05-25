@@ -26,6 +26,26 @@ for (i in 1:nrow(cs_qc)){
 }
 
 
+#colnames(cs_qc)
+# [1] "N_cluster"        "n_traits"         "study_ids"        "traits"          
+# [5] "EFOs"             "h2s"              "intercepts"       "alfa"            
+# [9] "expected_h2_gip1" "expected_rgs"     "ChatGPT_name"     "intercept_min"   
+#[13] "intercept_max"    "GIP1_intecept"    "GIP1_sig"         "GIP1_nsnps"      
+#[17] "GIP1_ratio"       "GIP1_avarage_Z2"  "max_avarage_Z2"   "max_nsnps"       
+#[21] "max_nsigs"        "max_ratio"  
+
+#heritability
+
+lst=strsplit(cs_qc$h2s,";")
+max_h2=unlist(lapply(lst,max))
+
+summary(cs_qc$GIP1_h2/as.numeric(max_h2))
+
+#inflation
+summary(cs_qc$GIP1_intecept/cs_qc$intercept_max)
+t.test(cs_qc$GIP1_intecept/cs_qc$intercept_max-1)
+
+# sig loci
 
 summary(cs_qc$GIP1_nsnps/cs_qc$max_nsnps)
 #   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
