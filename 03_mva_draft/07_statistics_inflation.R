@@ -14,6 +14,12 @@ for (i in 1:nrow(cs_qc)){
 	cs_qc$GIP1_nsnps[i]=nsigs[ind_gip1,2]
 	cs_qc$GIP1_ratio[i]=nsigs[ind_gip1,4]
 
+	if (ncol(nsigs)==5){
+		cs_qc$GIP1_avarage_Z2[i]=nsigs[ind_gip1,5]
+		cs_qc$max_avarage_Z2[i]=max(nsigs[ind,5])
+	}
+	
+
 	cs_qc$max_nsnps[i]=max(nsigs[ind,2])
 	cs_qc$max_nsigs[i]=max(nsigs[ind,3])
 	cs_qc$max_ratio[i]=max(nsigs[ind,4])
@@ -34,3 +40,6 @@ summary(lm(l~cs_qc$max_nsigs))
 
 l=cs_qc$GIP1_sig*(cs_qc$max_nsnps/cs_qc$GIP1_nsnps)*cs_qc$GIP1_intecept/cs_qc$intercept_max
 summary(lm(l~cs_qc$max_nsigs))
+
+summary(lm(cs_qc$GIP1_avarage_Z2~cs_qc$max_avarage_Z2))
+summary(cs_qc$GIP1_avarage_Z2/cs_qc$max_avarage_Z2)

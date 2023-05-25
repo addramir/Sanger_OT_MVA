@@ -21,6 +21,7 @@ clusters_passed_qc=clusters[!clusters%in%clusters_to_exclude]
 ind=match(clusters_passed_qc,rgs$MVA)
 table(rgs$MVA[ind]==clusters_passed_qc)
 intercepts=rgs$Intercept[ind]
+h2s=rgs$Total.Observed.scale.h2[ind]
 
 intercept_min=unlist(lapply(strsplit(cluster_summary$intercepts,split=";"),FUN=min))
 intercept_max=unlist(lapply(strsplit(cluster_summary$intercepts,split=";"),FUN=max))
@@ -33,6 +34,10 @@ table(clusters_passed_qc_s[ind]==cluster_summary$N_cluster)
 
 cluster_summary$GIP1_intecept=NA
 cluster_summary$GIP1_intecept=intercepts[ind]
+
+cluster_summary$GIP1_h2=NA
+cluster_summary$GIP1_h2=h2s[ind]
+
 
 CS_nona=na.omit(cluster_summary)
 summary(CS_nona$GIP1_intecept/as.numeric(CS_nona$intercept_max))
