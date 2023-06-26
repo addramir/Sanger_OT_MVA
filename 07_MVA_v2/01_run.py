@@ -6,12 +6,12 @@ import re
 import os
 
 
-os.chdir("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/")
+os.chdir("/home/yt4/projects/Sanger_OT_MVA/07_MVA_v2/")
 import core_functions as CF
 
 ##### Global variables
 max_in_mva=10
-path_to_save="/home/yt4/projects/MVA_output/01_clusters_draft/output/"
+path_to_save="/home/yt4/projects/MVA_output/03_mva_v2/output/"
 max_ram_to_use="110g"
 
 ##### Load all data
@@ -25,16 +25,11 @@ list_of_traits_in_gcor=list(GCOR.columns)
 #self checking
 sum([elem in list_of_traits_in_h2 for elem in list_of_traits_in_gcor])
 
-QC=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/QC_results.csv",sep=";")
-QC=QC[QC["total_SNP"]>=2e6]
-list_of_traits_in_qc=list(QC["study_id"])
-
-clusters=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/03_mva_draft/updated_grps_final_noNA.csv")
+clusters=pd.read_csv("/home/yt4/projects/Sanger_OT_MVA/07_MVA_v2/updated_grps_with_filters.csv")
 list_of_traits_in_clusters=list(clusters.iloc[:,0])
 sum([elem in list_of_traits_in_gcor for elem in list_of_traits_in_clusters])
 
 clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
-clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_qc)]
 
 number_of_clusters=clusters["grps"].max()
 
@@ -42,7 +37,7 @@ number_of_clusters=clusters["grps"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
-for clst in range(90,number_of_clusters+1):
+for clst in range(0,number_of_clusters+1):
     print(str(clst))
     subclst=clusters[clusters.iloc[:,1]==clst]    
     if len(subclst)>1:
