@@ -21,6 +21,9 @@ list_of_traits_in_h2=list(h2["Trait"])
 
 GCOR=pd.read_csv("~/projects/MVA_output/01_clusters_draft/df_1222.csv",index_col=0)
 list_of_traits_in_gcor=list(GCOR.columns)
+list_of_traits_in_gcor.remove('CVD_MVA')
+
+
 
 #self checking
 sum([elem in list_of_traits_in_h2 for elem in list_of_traits_in_gcor])
@@ -30,6 +33,7 @@ list_of_traits_in_clusters=list(clusters.iloc[:,0])
 sum([elem in list_of_traits_in_gcor for elem in list_of_traits_in_clusters])
 
 clusters=clusters[clusters.iloc[:,0].isin(list_of_traits_in_gcor)]
+clusters
 
 number_of_clusters=clusters["grps"].max()
 
@@ -37,7 +41,7 @@ number_of_clusters=clusters["grps"].max()
 
 clst=1
 #for clst in range(1,number_of_clusters+1):
-for clst in range(0,number_of_clusters+1):
+for clst in range(401,number_of_clusters+1):
     print(str(clst))
     subclst=clusters[clusters.iloc[:,1]==clst]    
     if len(subclst)>1:
